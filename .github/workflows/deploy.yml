@@ -1,1 +1,29 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - main  # Le workflow s'exécute lors d'un push sur la branche main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Utilise la dernière version d'Ubuntu pour le job
+
+    steps:
+    # Étape 1 : Vérifier le code du repository
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Étape 2 : Configurer Heroku
+    - name: Set up Heroku
+      uses: akshnz/heroku-cli-action@v2  # Action GitHub pour configurer Heroku CLI
+      with:
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}  # Votre email Heroku (en tant que secret dans GitHub)
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}  # Votre clé API Heroku (en tant que secret dans GitHub)
+
+    # Étape 3 : Déployer l'application sur Heroku
+    - name: Deploy to Heroku
+      run: |
+        git remote add heroku https://git.heroku.com/stormy-fjord-33387.git  # URL de votre application Heroku
+        git push heroku main  # Déployer sur la branche 'main' de l'app Heroku
 
